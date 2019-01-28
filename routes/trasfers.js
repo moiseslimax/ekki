@@ -5,6 +5,27 @@ const Trasfer = require('../models/Trasfer')
 const User = require('../models/User')
 
 
+router.post('/paycard', (req,res) => {
+    User.findOne({_id: req.body.userid})
+        .then(response => {
+            let balance = parseFloat(response.balance)
+            let debt = parseFloat(response.creditcard[0].debt)
+            if (balance < debt) {
+                res.status(200).json({error: "Saldo menor que divida!"})
+            } else if (debt == 0) {
+                res.status(200).json({error: "Sem divida de cartão de crédito!"})
+            } else {
+                let newUserBalance = balance - debt;
+                // console.log(newUserBalance);
+
+                User.findOneAndUpdate({_id: req.body.userid}, { $set: {balance: newUserBalance, creditcard: {debt: 0}}})
+                .then(user => res.status(200).json({sucess: "Saldo atualizado com sucesso!"}))
+                .catch(err => res.status(404).json({ err }))
+            }
+        })
+})
+
+
 // @route POST api/trasfer/normaltrasfer
 // @desc  Add creditCard
 // @access Privite 
@@ -32,7 +53,7 @@ router.post('/normaltrasfer', (req,res) => {
                                             const newUserBalance = 0;
                                             const rest = user.balance - req.body.amount;
                                             const debt = Number(user.creditcard[0].debt) + Number(rest);
-                                            User.findOneAndUpdate({_id: req.body.userid}, { $set: {balance: newUserBalance, creditcard: {debt: debt}}})
+                                            User.findOneAndUpdate({_id: req.body.userid}, { $set: {balance: newUserBalance, creditcard: {debt: Math.abs(debt)}}})
                                                  .catch(err => res.status(404).json({ err }))
                                         } else {
                                             console.log('menos dinheiro que vc tem')
@@ -47,6 +68,7 @@ router.post('/normaltrasfer', (req,res) => {
                                         const newTrasfer = new Trasfer({
                                                 sentto: userto.name,
                                                 sentfrom: user.name,
+                                                sentfromid: user._id,
                                                 amount: req.body.amount
                                             });
                                         console.log(newTrasfer);

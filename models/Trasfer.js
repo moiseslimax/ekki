@@ -14,8 +14,12 @@ const TrasferSchema = new Schema({
         required: true
     },
     amount:{
-        type: Schema.Types.Decimal128,
+        type: String,
         required: true,
+    },
+    sentfromid:{
+        type: String,
+        required: true
     },
     date:{
         type: Date,

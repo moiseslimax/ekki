@@ -82,6 +82,7 @@ router.post('/normaltrasfer', (req,res) => {
                                         const newTrasfer = new Trasfer({
                                                 sentto: userto.name,
                                                 sentfrom: user.name,
+                                                sentfromid: user._id,
                                                 amount: req.body.amount
                                             });
                                         console.log(newTrasfer);

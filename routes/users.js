@@ -6,8 +6,9 @@ const validadeRegisterInput = require('../validation/register')
 const validadeAddContact = require('../validation/addcontact')
 const validadeAddCreditCard = require('../validation/addcreditcard')
 
-//User model
+//Models
 const User = require('../models/User')
+const Trasfer = require('../models/Trasfer')
 
 // @route GET api/posts/test
 // @desc  get all posts
@@ -165,12 +166,12 @@ router.delete('/deletecontact/:contact_email', (req,res) => {
 // @desc  Add creditCard
 // @access Privite 
 router.post('/addcreditcard', (req,res) => {
-    // console.log(req.body);
+    console.log(req.body);
     const { errors, isValid } = validadeAddCreditCard(req.body);
     //check validation
     if(!isValid) {
         //Return any errors with 400 status
-        return res.status(400).json(errors);
+        return res.status(200).json(errors);
     }
     User.findOne( { _id: req.body.userid })
         .then(user => {
@@ -193,9 +194,9 @@ router.post('/addcreditcard', (req,res) => {
 // @route get api/user/creditcard
 // @desc  get creditcard
 // @access Privite 
-router.get('/creditcard', (req,res) => {
-
-     User.findOne( { _id: req.body.userid })
+router.get('/creditcard/:userid', (req,res) => {
+    // console.log('credit ', req.body.userid);
+     User.findOne( { _id: req.params.userid })
          .then(user => {
              if (user.creditcard.length == 0) {
                  return res.status(404).json({ user: 'Esse usuário não tem cartões de crédito' });
@@ -208,16 +209,16 @@ router.get('/creditcard', (req,res) => {
  // @route DELETE api/user/deletecreditcard/:contact_id
  // @desc  delete creditcard
  // @access Privite 
- router.delete('/deletecreditcard/:creditcard_id', (req,res) => {
+ router.delete('/deletecreditcard/', (req,res) => {
 
       User.findOne( { _id: req.body.userid })
          .then(user => {
              const removeIndex = user.creditcard
                  .map(item => item.id)
-                 .indexOf(req.params.creditcard_id);
+                 .indexOf(user.creditcard[0]._id);
  
              //remove from array
-             user.creditcard.splice(removeIndex, 1);
+             user.creditcard.splice(removeIndex,1);
  
              user.save().then(user => res.json(user))
          })
@@ -226,7 +227,13 @@ router.get('/creditcard', (req,res) => {
 
 ////////////////////END-OFF: Credit Card Part////////////////////////////////
 
+router.get('/history/:userid', (req,res) => {
 
+    Trasfer.find({sentfromid: req.params.userid})
+        .then(response => {
+            res.status(200).json({response})
+        })
+})
 
 
 

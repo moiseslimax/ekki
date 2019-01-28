@@ -17,11 +17,7 @@ const UserSchema = new Schema({
         required: true
     },
     balance:{
-        type: Schema.Types.Decimal128,
-        required: true
-    },
-    creditbalance:{
-        type: Number,
+        type: String,
         required: true
     },
     creditcard: [
@@ -31,7 +27,7 @@ const UserSchema = new Schema({
                 required: false
             },
             number: {
-                type: Number,
+                type: String,
                 required: false
             },
             //tem que mudar para date
@@ -40,7 +36,7 @@ const UserSchema = new Schema({
                 required: false
             },
             debt:{
-                type: Schema.Types.Decimal128,
+                type: String,
                 required: false
             }
         }

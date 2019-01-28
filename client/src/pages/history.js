@@ -1,27 +1,35 @@
 import React, { Component } from 'react'
 import { Row, Col } from 'antd';
 import { Table } from 'antd';
+import axios from 'axios';
+
 export default class History extends Component {
+        constructor(props) {
+          super(props);
+          this.state = {
+            data: [{
+              
+            }]
+          };
+        }
+  
+  componentDidMount = () => {
+    // console.log(sessionStorage.getItem("userid"));
+    axios.get(`http://localhost:5000/api/user/history/${sessionStorage.getItem("userid")}`)
+        .then(res => {
+          this.setState({data: res.data.response})
+          console.log(res.data.response)
+        })
+  
+  }  
     render() {
         const columns = [
-            { title: 'Destinatário', dataIndex: 'name', key: 'name' },
-            { title: 'Valor', dataIndex: 'value', key: 'value' },
+            { title: 'Destinatário', dataIndex: 'sentto', key: 'name' },
+            { title: 'Valor', dataIndex: 'amount', key: 'value' },
             { title: 'Data da Trasferencia', dataIndex: 'date', key: 'date' },
-            
           ];
           
-          const data = [
-            {
-              key: 1, name: 'John Brown', value: 32, date: '18/12/2018',
-            },
-            {
-              key: 2, name: 'Jim Green', value: 42, date: '18/12/2018',
-            },
-            {
-              key: 3, name: 'Joe Black', value: 32, date: '18/12/2018', 
-            },
-          ];
-          
+          console.log()
         return (
             <div>
                 
@@ -31,9 +39,9 @@ export default class History extends Component {
                 <div>
                 <Table
                     columns={columns}
-                    dataSource={data}
+                    dataSource={this.state.data}
                 />
-     
+
                 </div>
               </Col>
             </Row>

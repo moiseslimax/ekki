@@ -10,15 +10,15 @@ module.exports = function validadeAddCreditCard(data) {
     data.expiryDate = !isEmpty(data.expiryDate) ? data.expiryDate : '';
 
     if (Validator.isEmpty(data.title)){
-        errors.name = 'Você precisa digitar o Titulo do cartão';
+        errors.error = 'Você precisa digitar o Titulo do cartão';
     }
 
     if (Validator.isEmpty(data.number)){
-        errors.email = 'Cartão deve ter um numero';
+        errors.error = 'Cartão deve ter um numero';
     }
 
-    if (Validator.isEmail(data.expiryDate)){
-        errors.email = 'Cartão precisa ter uma data de expiração';
+    if (Validator.isEmpty(data.expiryDate)){
+        errors.error = 'Cartão precisa ter uma data de expiração';
     }
 
     return {
