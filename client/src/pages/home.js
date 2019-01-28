@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Row, Col, Button,  Drawer, Form, Input, Select, DatePicker, Icon,  } from 'antd';
+import { Row, Col,message  } from 'antd';
 import { Table } from 'antd';
 import axios from 'axios';
 import ModalContact from '../components/ModalContact'
@@ -24,9 +24,24 @@ import ModalContact from '../components/ModalContact'
       
       }      
 
-      handleDeleteContact =() => {
+      handleDeleteContact =(e, email) => {
+        e.preventDefault();
         
+        // console.log(sessionStorage.getItem("userid"));
+        axios.delete(`http://localhost:5000/api/user/deletecontact/${email}`, {data: {userid: sessionStorage.getItem("userid")}})
+        .then(res => {
+          message.success('Contato excluido com sucesso!');
+          setTimeout( function(){ 
+            window.location.reload();
+          }  , 1500 );
+        })
+        .catch(err => {
+          console.log(err)
+          //erro ao excluir contato
+        })
+
       }
+
   render() {
     // const { getFieldDecorator } = this.props.form;
   
@@ -35,23 +50,11 @@ import ModalContact from '../components/ModalContact'
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
         {
-          title: 'Action', dataIndex: '', key: 'x', render: () => <div><a href="" onClick={() => {}}>Delete</a> <a href="javascript:;">Edit</a></div>,
+          title: 'Action', dataIndex: 'delete', key: 'x', render: (text, record) => <div><a href="" onClick={(e) => {this.handleDeleteContact(e, record.email)}}>Delete</a></div>,
         },
       ];
       
-      const data = [
-        {
-          key: 1, name: 'John Brown', email: 'teste@teste.com.br',
-        },
-        {
-          key: 2, name: 'Jim Green', email: 'teste@teste.com.br',
-        },
-        {
-          key: 3, name: 'Joe Black', email: 'teste@teste.com.br', 
-        },
-      ];
-
-    return (
+      return (
         <div>
             <h1>Dados Bancarios</h1>
         <Row style={{marginBottom: 50}}>

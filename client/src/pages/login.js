@@ -39,7 +39,7 @@ class NormalLoginForm extends React.Component {
     return (
       <Row>
         <Col span={6} offset={9}>
-        <div style={{background: "#bcdbf738", padding: 25, borderRadius: 10, height: "50%", margin: "auto"}}>
+        <div style={{background: "#bcdbf738", padding: 25, borderRadius: 10,}}>
           <h1 style={{textAlign: "center", fontSize: 50}}>Ekki</h1>
           <h3 style={{textAlign: "center", fontSize: 25}}>Faça seu login</h3>
             <Form onSubmit={this.handleSubmit} className="login-form">

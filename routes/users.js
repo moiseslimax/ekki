@@ -142,13 +142,13 @@ router.get('/contacts', (req,res) => {
 // @route DELETE api/user/deleteContact/:contact_id
 // @desc  delete Contact
 // @access Privite 
-router.delete('/deletecontact/:contact_id', (req,res) => {
+router.delete('/deletecontact/:contact_email', (req,res) => {
 
      User.findOne( { _id: req.body.userid })
         .then(user => {
             const removeIndex = user.contacts
                 .map(item => item.id)
-                .indexOf(req.params.contact_id);
+                .indexOf(req.params.contact_email);
 
             //remove from array
             user.contacts.splice(removeIndex, 1);
