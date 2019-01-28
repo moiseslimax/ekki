@@ -45,11 +45,14 @@ class HorizontalLoginForm extends React.Component {
             break; 
         }
      } else {
-      // console.log('entrou')
-      this.setState({
-        visible: false,
-      });
-      window.location.reload()
+      message.success('Contato adicionado com sucesso!');
+          setTimeout( () => {      
+            this.setState({
+              visible: false,
+            });
+            window.location.reload()          
+          }  , 1500 );
+          
       }
     })
   }
@@ -72,8 +75,8 @@ class HorizontalLoginForm extends React.Component {
 
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>
-          Open Modal
+        <Button style={{marginBottom: 10}}type="primary" icon="plus" onClick={this.showModal}>
+          Adicionar Contato
         </Button>
             <Modal
               title="Adicionar contato"
@@ -89,7 +92,7 @@ class HorizontalLoginForm extends React.Component {
               {getFieldDecorator('userName', {
                 rules: [{ required: true, message: 'Por favor digite o email' }],
               })(
-                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)', width: "100%" }}/>} onChange={this.onEmailChange} placeholder="Email" />
+                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)', width: "100%" }}/>} onChange={this.onEmailChange} onPressEnter={() => {this.handleOk()}} placeholder="Email" />
               )}
             </Form.Item>
 
