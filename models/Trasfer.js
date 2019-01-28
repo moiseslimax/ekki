@@ -1,19 +1,21 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+require('mongoose-currency').loadType(mongoose);
+var Currency = mongoose.Types.Currency;
 //Create schema
 const TrasferSchema = new Schema({
-    sentFrom:{
+    sentfrom:{
         type: String,
         required: true
     },
-    sentTo:{
+    sentto:{
         type: String,
         required: true
     },
     amount:{
-        type: Number,
-        required: true
+        type: Schema.Types.Decimal128,
+        required: true,
     },
     date:{
         type: Date,

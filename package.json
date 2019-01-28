@@ -13,10 +13,13 @@
   "author": "Moisés Maldaner de Lima",
   "license": "MIT",
   "dependencies": {
+    "axios": "^0.18.0",
     "body-parser": "^1.18.3",
     "concurrently": "^4.1.0",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
     "mongoose": "^5.4.6",
+    "mongoose-currency": "^0.2.0",
     "nodemon": "^1.18.9",
     "validator": "^10.11.0"
   }

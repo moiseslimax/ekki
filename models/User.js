@@ -17,63 +17,61 @@ const UserSchema = new Schema({
         required: true
     },
     balance:{
-        type: Number,
-        required: false
+        type: Schema.Types.Decimal128,
+        required: true
     },
-    creditBalance:{
+    creditbalance:{
         type: Number,
-        required: false
+        required: true
     },
-    creditCard: [
+    creditcard: [
         {
-            card: [
-                {
-                    number: {
-                        type: Number,
-                        required: true
-                    },
-                    expiryDate: {
-                        type: String,
-                        required: true
-                    },
-                }
-            ]
+            title: {
+                type: String,
+                required: false
+            },
+            number: {
+                type: Number,
+                required: false
+            },
+            //tem que mudar para date
+            expiryDate: {
+                type: String,
+                required: false
+            },
+            debt:{
+                type: Schema.Types.Decimal128,
+                required: false
+            }
         }
     ],
     contacts: [
         {
-            contact:[
-                {
-                    name: {
-                        type: String,
-                        required: true
-                       },
-                    email: {
-                        type: String,
-                        required: true
-                       },       
-                }
-            ]
+            name: {
+                type: String,
+                required: false
+                },
+            email: {
+                type: String,
+                required: false
+                },       
+
         }
     ],
     history: [
         {
-            trasfer:[
-                {
-                    sentFrom: {
-                        type: String,
-                        required: true
-                       },
-                    sentTo: {
-                        type: String,
-                        required: true
-                       },   
-                    amount: {
-                        type: String,
-                        required: true
-                       },      
-                }
-            ]
+            sentFrom: {
+                type: String,
+                required: true
+                },
+            sentTo: {
+                type: String,
+                required: true
+                },   
+            amount: {
+                type: String,
+                required: true
+                },      
         }
     ],
     date:{
