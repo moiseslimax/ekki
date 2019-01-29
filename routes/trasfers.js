@@ -25,6 +25,28 @@ router.post('/paycard', (req,res) => {
         })
 })
 
+router.post('/validate-trasfer', (req,res) => {
+    if (!req.body.email) {
+        return res.status(200).json({error: "Você precisa digitar um email!"})
+    } else if (!req.body.amount) {
+        return res.status(200).json({error: "Você precisa digitar um valor para trasferencia!"})
+    } else {
+        User.findOne({_id: req.body.userid})
+        .then(user => {
+                let balance =  parseFloat(user.balance);
+                let amount = parseFloat(req.body.amount);
+                let found = user.contacts.some(function (el) {
+                    return el.email === req.body.email;
+                    })
+                if (found == false) {
+                    return res.status(200).json({error: "Você não tem esse email na lista de contatos!"})
+                } else {
+                    return res.status(200).json({sucess: "Verificação ok!"})
+                }
+            })
+    }
+})
+
 
 // @route POST api/trasfer/normaltrasfer
 // @desc  Add creditCard

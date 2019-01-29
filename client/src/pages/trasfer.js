@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Steps, Button, message } from 'antd';
+import { Steps, Button, message, Form, Icon, Input, Spin } from 'antd';
+import axios from 'axios';
 
 const Step = Steps.Step;
 
@@ -14,11 +15,13 @@ const steps = [{
   content: 'Last-content',
 }];
 
-class Trasfer extends React.Component {
+class TrasferForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       current: 0,
+      email: '',
+      amount: ''
     };
   }
 
@@ -32,35 +35,131 @@ class Trasfer extends React.Component {
     this.setState({ current });
   }
 
+  handleVerification = () => {
+    let current = this.state.current + 1;
+    this.setState({ current });
+    axios.post(`http://localhost:5000/api/trasfer/validate-trasfer/`,  {userid: sessionStorage.getItem("userid"), email: this.state.email, amount: this.state.amount})
+    .then(res => {
+      console.log(res)
+      if (res.data.error) {
+        let current = this.state.current - 1;
+        this.setState({ current });
+        switch (res.data.error) {
+          case 'Você precisa digitar um email!':
+          message.warning(res.data.error);
+            break;
+          case 'Você precisa digitar um valor para trasferencia!':
+          message.warning(res.data.error);
+            break;
+          case 'Você não tem esse email na lista de contatos!':
+          message.warning(res.data.error);
+            break;
+        }
+      } else {
+        console.log(res.data)
+      }
+
+    })
+  }
+
+  onEmailChange = (event) => {
+    this.setState({email: event.target.value})
+    // console.log(this.state.email)
+  }
+  onAmountChange = (event) => {
+    this.setState({amount: event.target.value})
+    // console.log(this.state.amount)
+  }
+
   render() {
-    const { current } = this.state;
+    const {
+      getFieldDecorator, getFieldError, isFieldTouched,
+    } = this.props.form;
+
+     // Only show error after a field is touched.
+      const userNameError = isFieldTouched('userName') && getFieldError('userName');
+      const passwordError = isFieldTouched('password') && getFieldError('password');
+      const { current } = this.state;
+      // console.log(current);
     return (
       <div>
         <Steps current={current}>
           {steps.map(item => <Step key={item.title} title={item.title} />)}
         </Steps>
-        <div className="steps-content">{steps[current].content}</div>
+        <div className="steps-content">
+        {
+           current < steps.length - 2
+            && 
+            <div style={{marginTop: 50, marginBottom: 50}}>
+              <h1 style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>Faça sua trasferencia!</h1>
+              <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}> 
+                
+                <Form layout="inline" onSubmit={this.handleSubmit}>
+                  <Form.Item
+                    validateStatus={userNameError ? 'error' : ''}
+                    help={userNameError || ''}
+                  >
+                    {getFieldDecorator('cardname', {
+                      rules: [{ required: true, message: 'Por favor digite o email' }],
+                    })(
+                      <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)', width: "100%" }}/>} onChange={this.onEmailChange}  placeholder="Email do destinatário" />
+                    )}
+                  </Form.Item>
+                    <Form.Item
+                      validateStatus={userNameError ? 'error' : ''}
+                      help={userNameError || ''}
+                    >
+                      {getFieldDecorator('cardnumber', {
+                        rules: [{ required: true, message: 'Por favor digite o Valor' }],
+                      })(
+                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)', width: "50%" }}/>} onChange={this.onAmountChange}  placeholder="Valor da trasferencia" />
+                      )}
+                  </Form.Item>
+                  <Form.Item>
+                    <Button type="primary" onClick={() => this.handleVerification()} htmlType="submit" className="login-form-button">
+                      Trasferir
+                    </Button>
+                  </Form.Item>
+                </Form>
+              </div>
+            </div>
+           
+        }
+        {
+          current === steps.length - 2
+            && 
+            <div style={{display: 'flex',  justifyContent:'center', verticalAlign:"middle", marginTop: 50, marginBottom: 50}}> 
+                <h1>Estamos verificando sua trasferencia...</h1> 
+                <br />
+                <div> <Spin size="large" /></div>
+            </div>
+            
+        }
+        {
+          current > 1
+            && <div> e 0</div>
+        }
+        </div>
         <div className="steps-action">
-          {
-            current < steps.length - 1
-            && <Button type="primary" onClick={() => this.next()}>Next</Button>
-          }
           {
             current === steps.length - 1
             && <Button type="primary" onClick={() => message.success('Processing complete!')}>Done</Button>
           }
           {
-            current > 0
-            && (
-            <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
-              Previous
-            </Button>
-            )
+            // current > 0
+            // && (
+            // // <Button style={{ marginLeft: 8 }} onClick={() => this.prev()}>
+            // //   Previous
+            // // </Button>
+            // )
           }
         </div>
       </div>
     );
   }
 }
+
+
+const Trasfer = Form.create({ name: 'trasfer_form' })(TrasferForm);
 
 export default Trasfer;
