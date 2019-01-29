@@ -4,7 +4,6 @@ import {
 } from 'antd';
 import { Row, Col } from 'antd';
 import axios from 'axios';
-import { Link } from 'react-router-dom'
 
 class NormalLoginForm extends React.Component {
   handleSubmit = (e) => {
@@ -62,7 +61,7 @@ class NormalLoginForm extends React.Component {
               <Button type="primary" htmlType="submit" className="login-form-button">
                 Log in
               </Button>
-              {/* Or <Link to="/register"><a>register now!</a></Link> */}
+              Or <a href="">register now!</a>
             </Form.Item>
           </Form>
         </div>
@@ -72,6 +71,6 @@ class NormalLoginForm extends React.Component {
   }
 }
 
-const Login = Form.create({ name: 'normal_login' })(NormalLoginForm);
+const Register = Form.create({ name: 'normal_Register' })(NormalLoginForm);
 
-export default Login
+export default Register

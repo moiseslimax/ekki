@@ -63,9 +63,9 @@ class App extends Component {
                       </div> */}
                     </Menu>
                   </Header>
-                  <Content style={{ padding: '0 50px' }}>
+                  <Content style={{ padding: '0 50px' }} >
                       
-                      <div style={{ background: '#fff', padding: 24, minHeight: 280, marginTop:35 }}>
+                    <div style={{ background: '#fff', padding: 24, height:"100%", width:"100%", marginTop:35 }} >
                       <Switch>
                         {console.log(this.state.userid)}
                         <Route path="/" exact component={Home} userid={this.state.userid}/>

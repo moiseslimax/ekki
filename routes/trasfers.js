@@ -38,11 +38,19 @@ router.post('/validate-trasfer', (req,res) => {
                 let found = user.contacts.some(function (el) {
                     return el.email === req.body.email;
                     })
-                if (found == false) {
-                    return res.status(200).json({error: "Você não tem esse email na lista de contatos!"})
+                    console.log(amount, balance);
+                if (amount > balance && user.creditcard.length == 0) {
+                    return res.status(200).json({error: "Você não tem saldo nem cartão de crédito para este valor, favor criar um cartão!"})
+                } else if (amount > balance && user.creditcard.length > 0 ) {
+                    return res.status(200).json({alert: "Seu saldo está abaixo do valor de trasferencia, irá usar o saldo do cartão de crédito!"})
                 } else {
-                    return res.status(200).json({sucess: "Verificação ok!"})
+                    if (found == false) {
+                        return res.status(200).json({error: "Você não tem esse email na lista de contatos!"})
+                    } else {
+                        return res.status(200).json({sucess: "Verificação ok!"})
+                    }
                 }
+               
             })
     }
 })

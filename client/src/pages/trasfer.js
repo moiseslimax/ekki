@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Steps, Button, message, Form, Icon, Input, Spin } from 'antd';
+import { Steps, Button, message, Form, Icon, Input, InputNumber, Spin, notification } from 'antd';
 import axios from 'axios';
 
 const Step = Steps.Step;
@@ -42,19 +42,19 @@ class TrasferForm extends React.Component {
     .then(res => {
       console.log(res)
       if (res.data.error) {
+        notification.open({
+          message: 'Erro na transação!',
+          description: res.data.error,
+          duration: 6.5
+        });
         let current = this.state.current - 1;
         this.setState({ current });
-        switch (res.data.error) {
-          case 'Você precisa digitar um email!':
-          message.warning(res.data.error);
-            break;
-          case 'Você precisa digitar um valor para trasferencia!':
-          message.warning(res.data.error);
-            break;
-          case 'Você não tem esse email na lista de contatos!':
-          message.warning(res.data.error);
-            break;
-        }
+      } else if (res.data.alert) {
+        notification.open({
+          message: 'Aviso de transação!',
+          description: res.data.alert,
+          duration: 6.5
+        });
       } else {
         console.log(res.data)
       }
@@ -67,8 +67,8 @@ class TrasferForm extends React.Component {
     // console.log(this.state.email)
   }
   onAmountChange = (event) => {
-    this.setState({amount: event.target.value})
-    // console.log(this.state.amount)
+    this.setState({amount: event})
+    console.log(this.state.amount)
   }
 
   render() {
@@ -112,7 +112,8 @@ class TrasferForm extends React.Component {
                       {getFieldDecorator('cardnumber', {
                         rules: [{ required: true, message: 'Por favor digite o Valor' }],
                       })(
-                        <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)', width: "50%" }}/>} onChange={this.onAmountChange}  placeholder="Valor da trasferencia" />
+                        <InputNumber  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                        parser={value => value.replace(/\$\s?|(,*)/g, '')} prefix={<InputNumber type="lock" style={{ color: 'rgba(0,0,0,.25)', width: "50%" }}/>} onChange={this.onAmountChange}  placeholder="Valor da trasferencia" />
                       )}
                   </Form.Item>
                   <Form.Item>
