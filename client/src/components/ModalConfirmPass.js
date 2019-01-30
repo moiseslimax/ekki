@@ -2,12 +2,6 @@ import React from 'react';
 import { Modal, Button,  Form, Icon, Input, message } from 'antd';
 import axios from 'axios';
 
-
-function hasErrors(fieldsError) {
-  return Object.keys(fieldsError).some(field => fieldsError[field]);
-}
-
-
 class HorizontalLoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -18,6 +12,11 @@ class HorizontalLoginForm extends React.Component {
       email: ''
     };
   }
+
+
+  componentWillReceiveProps = () => {
+    this.setState({visible: this.props.visible})
+  } 
 
   onEmailChange = (event) => {
     this.setState({email: event.target.value})
@@ -75,9 +74,6 @@ class HorizontalLoginForm extends React.Component {
 
     return (
       <div>
-        <Button style={{marginBottom: 10}}type="primary" icon="plus" onClick={this.showModal}>
-          Adicionar Contato
-        </Button>
             <Modal
               title="Adicionar contato"
               visible={this.state.visible}
@@ -102,6 +98,6 @@ class HorizontalLoginForm extends React.Component {
     );
   }
 }
-const ModalContact = Form.create({ name: 'horizontal_login' })(HorizontalLoginForm);
+const ModalConfirmPass = Form.create({ name: 'horizontal_login' })(HorizontalLoginForm);
 
-export default ModalContact
+export default ModalConfirmPass

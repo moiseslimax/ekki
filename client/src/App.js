@@ -59,7 +59,7 @@ class App extends Component {
                       style={{ lineHeight: '64px' }}
                     >
                       <Menu.Item key="1"><NavLink to="/">Home</NavLink></Menu.Item>
-                      <Menu.Item key="2"><NavLink to="/trasfer">Trasferencia</NavLink></Menu.Item>
+                      <Menu.Item key="2"><NavLink to="/trasfer">Transferência</NavLink></Menu.Item>
                       <Menu.Item key="5"><NavLink to="/history">Histórico</NavLink></Menu.Item>
                       <Menu.Item key="6" style={{float: "right"}} onClick={() =>{this.handleLogout()}}>Logout</Menu.Item>
                       

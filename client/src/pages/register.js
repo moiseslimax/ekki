@@ -4,6 +4,7 @@ import {
 } from 'antd';
 import { Row, Col } from 'antd';
 import axios from 'axios';
+import { Link, Router } from 'react-router-dom'
 
 class NormalLoginForm extends React.Component {
   
@@ -14,7 +15,7 @@ class NormalLoginForm extends React.Component {
       if (!err) {
         // console.log(`${document.location.href}api/user/getlogin`)
         // console.log('Received values of form: ', values);
-         axios.post(`http://localhost:5000/api/user/register`, { name: values.userName, email: values.email, password: values.password, password2: values.password2 })
+         axios.post(`http://test.moisesmlima.com:3020/api/user/register`, { name: values.userName, email: values.email, password: values.password, password2: values.password2 })
             .then(res => {
              if (res.data.error) {
                   message.warning(res.data.error);
@@ -50,7 +51,7 @@ class NormalLoginForm extends React.Component {
               {getFieldDecorator('email', {
                 rules: [{ required: true, message: 'Por favor digite um email!' }],
               })(
-                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
+                <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
               )}
             </Form.Item>
             <Form.Item>
@@ -70,7 +71,7 @@ class NormalLoginForm extends React.Component {
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight: 5}}>
                Registrar
-              </Button> ou voltar para<a href="/login"> Login</a>
+              </Button> ou voltar para <Link to="/login"><a>Login</a></Link>
             </Form.Item>
           </Form>
         </div>

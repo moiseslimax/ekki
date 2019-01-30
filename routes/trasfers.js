@@ -4,7 +4,6 @@ const router = express.Router();
 const Trasfer = require('../models/Trasfer')
 const User = require('../models/User')
 
-
 router.post('/paycard', (req,res) => {
     User.findOne({_id: req.body.userid})
         .then(response => {
@@ -54,9 +53,21 @@ router.post('/validate-trasfer', (req,res) => {
                                     console.log('ta pra sair', trasfer);
                                     return true
                                 } else {
-                                    return true
+                                    return false
                                 }
                             })
+trasfer.map(tras => {
+                                var diff = Math.abs(new Date(tras.datedb) - new Date());
+                                console.log(diff)
+                                if (diff <= 120000) {
+                                    console.log('tem 2 min');
+                                    
+                                } else {
+                                   console.log('não tem nenhum menos de 2 min')
+                                }
+                            })
+
+
                             console.log(isTrasfer2m); 
                             if (isTrasfer2m.includes(true)) {
                                 console.log('oie')

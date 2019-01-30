@@ -7,13 +7,21 @@ import axios from 'axios';
 import { Link, Router } from 'react-router-dom'
 
 class NormalLoginForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      visible: false,   
+    };
+  }
+
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // console.log(`${document.location.href}api/user/getlogin`)
         console.log('Received values of form: ', values);
-         axios.post(`http://localhost:5000/api/user/getlogin`, { email: values.userName, password: values.password })
+         axios.post(`http://test.moisesmlima.com:3020/api/user/getlogin`, { email: values.userName, password: values.password })
             .then(res => {
              if (res.data.error) {
                 switch(res.data.error) {
@@ -48,21 +56,21 @@ class NormalLoginForm extends React.Component {
               {getFieldDecorator('userName', {
                 rules: [{ required: true, message: 'Por favor digite um email!' }],
               })(
-                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
               )}
             </Form.Item>
             <Form.Item>
               {getFieldDecorator('password', {
                 rules: [{ required: true, message: 'Por favor digite uma senha!' }],
               })(
-                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Senha" />
               )}
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" className="login-form-button"  style={{marginRight: 5}}>
                 Log in
               </Button>
-              ou <a href="/register" >Registre-se agora!</a>
+              ou <Link to="/register"><a>Registre-se agora!</a></Link>
             </Form.Item>
           </Form>
         </div>

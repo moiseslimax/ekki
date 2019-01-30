@@ -15,7 +15,7 @@ export default class CreditCardBox extends Component {
 
     componentDidMount = () => {
         // console.log(sessionStorage.getItem("userid"))
-        axios.get(`http://localhost:5000/api/user/creditcard/${sessionStorage.getItem("userid")}`, )
+        axios.get(`http://test.moisesmlima.com:3020/api/user/creditcard/${sessionStorage.getItem("userid")}`, )
         .then(res => {
           if (!res.data.length == 0) {
               console.log(res.data[0].debt.$numberDecimal)
@@ -28,7 +28,7 @@ export default class CreditCardBox extends Component {
         e.preventDefault();
         
         // console.log(sessionStorage.getItem("userid"));
-        axios.delete(`http://localhost:5000/api/user/deletecreditcard/`, {data: {userid: sessionStorage.getItem("userid")}})
+        axios.delete(`http://test.moisesmlima.com:3020/api/user/deletecreditcard/`, {data: {userid: sessionStorage.getItem("userid")}})
         .then(res => {
           message.success('Cartão de crédito excluido com sucesso!');
           setTimeout( function(){ 

@@ -15,7 +15,7 @@ export default class History extends Component {
   
   componentDidMount = () => {
     // console.log(sessionStorage.getItem("userid"));
-    axios.get(`http://localhost:5000/api/user/history/${sessionStorage.getItem("userid")}`)
+    axios.get(`http://test.moisesmlima.com:3020/api/user/history/${sessionStorage.getItem("userid")}`)
         .then(res => {
           this.setState({data: res.data.response})
           console.log(res.data.response)

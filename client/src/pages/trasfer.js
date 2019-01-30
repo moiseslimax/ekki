@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
-import { Steps, Button, message, Form, Icon, Input, InputNumber, Spin, notification } from 'antd';
+import { Steps, Button, Modal, Form, Icon, Input, InputNumber, Spin, notification } from 'antd';
 import axios from 'axios';
 import { Link } from "react-router-dom";
+import Password from 'antd/lib/input/Password';
 
 const Step = Steps.Step;
 
 const steps = [{
-  title: 'Dados de Trasferencia',
+  title: 'Dados de Transferência',
   content: 'First-content',
 }, {
   title: 'Verificação',
@@ -22,7 +23,8 @@ class TrasferForm extends React.Component {
     this.state = {
       current: 0,
       email: '',
-      amount: ''
+      amount: '',
+      password: ''
     };
   }
 
@@ -39,7 +41,7 @@ class TrasferForm extends React.Component {
   handleVerification = () => {
     let current = this.state.current + 1;
     this.setState({ current });
-    axios.post(`http://localhost:5000/api/trasfer/validate-trasfer/`,  {userid: sessionStorage.getItem("userid"), email: this.state.email, amount: this.state.amount})
+    axios.post(`http://test.moisesmlima.com:3020/api/trasfer/validate-trasfer/`,  {userid: sessionStorage.getItem("userid"), email: this.state.email, amount: this.state.amount})
     .then(res => {
       console.log(res)
       if (res.data.error) {
@@ -61,7 +63,7 @@ class TrasferForm extends React.Component {
         }
         //Trasfer post
         console.log('chegou');
-        axios.post('http://localhost:5000/api/trasfer/normaltrasfer/',{userid: sessionStorage.getItem("userid"), sentto: this.state.email, amount: this.state.amount})
+        axios.post('http://test.moisesmlima.com:3020/api/trasfer/normaltrasfer/',{userid: sessionStorage.getItem("userid"), sentto: this.state.email, amount: this.state.amount})
         .then(res => {
           console.log(res)
           let current = this.state.current + 1;
@@ -74,6 +76,10 @@ class TrasferForm extends React.Component {
 
   onEmailChange = (event) => {
     this.setState({email: event.target.value})
+    // console.log(this.state.email)
+  }
+  onPasswordChange = (event) => {
+    this.setState({password: event})
     // console.log(this.state.email)
   }
   onAmountChange = (event) => {
@@ -93,6 +99,7 @@ class TrasferForm extends React.Component {
       // console.log(current);
     return (
       <div>
+        {/* Content */}
         <Steps current={current}>
           {steps.map(item => <Step key={item.title} title={item.title} />)}
         </Steps>
@@ -101,7 +108,7 @@ class TrasferForm extends React.Component {
            current < steps.length - 2
             && 
             <div style={{marginTop: 50, marginBottom: 50}}>
-              <h1 style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>Faça sua trasferencia!</h1>
+              <h1 style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>Faça sua transferência!</h1>
               <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}> 
                 
                 <Form layout="inline" onSubmit={this.handleSubmit}>
@@ -122,12 +129,12 @@ class TrasferForm extends React.Component {
                       {getFieldDecorator('cardnumber', {
                         rules: [{ required: true, message: 'Por favor digite o Valor' }],
                       })(
-                        <InputNumber  formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-                        parser={value => value.replace(/\$\s?|(,*)/g, '')} prefix={<InputNumber type="lock" style={{ color: 'rgba(0,0,0,.25)', width: "50%" }}/>} onChange={this.onAmountChange}  placeholder="Valor da trasferencia" />
+                        <InputNumber 
+                        parser={value => value.replace(/\$\s?|(,*)/g, '')} prefix={<InputNumber type="lock" style={{ color: 'rgba(0,0,0,.25)', width: "50%" }}/>} onChange={this.onAmountChange}  placeholder="Valor" />
                       )}
                   </Form.Item>
                   <Form.Item>
-                    <Button type="primary" onClick={() => this.handleVerification()} htmlType="submit" className="login-form-button">
+                    <Button type="primary" onClick={() => {this.handleVerification()}} htmlType="submit" className="login-form-button">
                       Trasferir
                     </Button>
                   </Form.Item>
@@ -140,7 +147,7 @@ class TrasferForm extends React.Component {
           current === steps.length - 2
             && 
             <div style={{display: 'flex',  justifyContent:'center', verticalAlign:"middle", marginTop: 50, marginBottom: 50}}> 
-                <h1>Estamos verificando sua trasferencia...</h1> 
+                <h1>Estamos verificando sua transferência ...</h1> 
                 <br />
                 <div> <Spin size="large" /></div>
             </div>
@@ -150,7 +157,7 @@ class TrasferForm extends React.Component {
           current > 1
             && 
             <div style={{ textAlign: "center", justifyContent: "center"}}> 
-              <h1 style={{display: "inline-block", fontSize: 50, marginTop: 60}}>Sua trasferencia foi realizada com sucesso!</h1>
+              <h1 style={{display: "inline-block", fontSize: 50, marginTop: 60}}>Sua transferência  foi realizada com sucesso!</h1>
               {/* <Link to="/"><Button type="primary" size="large">Voltar para Home!</Button></Link> */}
             </div>
         }

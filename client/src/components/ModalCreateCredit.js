@@ -33,7 +33,7 @@ class HorizontalLoginForm extends React.Component {
 
   handleOk = (e) => {
     // console.log(e.value);
-    axios.post(`http://localhost:5000/api/user/addcreditcard`, { 
+    axios.post(`http://test.moisesmlima.com:3020/api/user/addcreditcard`, { 
     title: this.state.name, 
     number: this.state.number,
     expiryDate: this.state.date , 

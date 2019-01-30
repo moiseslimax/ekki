@@ -21,7 +21,7 @@ import CreditCardBox from '../components/CreditCardBox'
 
       componentDidMount = () => {
         // console.log(sessionStorage.getItem("userid"));
-        axios.get(`http://localhost:5000/api/user/userdata/${sessionStorage.getItem("userid")}`)
+        axios.get(`http://test.moisesmlima.com:3020/api/user/userdata/${sessionStorage.getItem("userid")}`)
             .then(res => {
               this.setState({data: res.data, balance: res.data.balance, creditcard: res.data.creditcard})
             })
@@ -32,7 +32,7 @@ import CreditCardBox from '../components/CreditCardBox'
         e.preventDefault();
         
         // console.log(sessionStorage.getItem("userid"));
-        axios.delete(`http://localhost:5000/api/user/deletecontact/${email}`, {data: {userid: sessionStorage.getItem("userid")}})
+        axios.delete(`http://test.moisesmlima.com:3020/api/user/deletecontact/${email}`, {data: {userid: sessionStorage.getItem("userid")}})
         .then(res => {
           message.success('Contato excluido com sucesso!');
           setTimeout( function(){ 
@@ -47,7 +47,7 @@ import CreditCardBox from '../components/CreditCardBox'
       }
 
       handlePayCard = () => {
-        axios.post(`http://localhost:5000/api/trasfer/paycard/`,  {userid: sessionStorage.getItem("userid")})
+        axios.post(`http://test.moisesmlima.com:3020/api/trasfer/paycard/`,  {userid: sessionStorage.getItem("userid")})
         .then(res => {
           console.log(res)
           if (res.data.error) {
