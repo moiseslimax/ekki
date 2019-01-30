@@ -38,18 +38,36 @@ router.post('/validate-trasfer', (req,res) => {
                 let found = user.contacts.some(function (el) {
                     return el.email === req.body.email;
                     })
-                    console.log(amount, balance);
-                if (amount > balance && user.creditcard.length == 0) {
-                    return res.status(200).json({error: "Você não tem saldo nem cartão de crédito para este valor, favor criar um cartão!"})
-                } else if (amount > balance && user.creditcard.length > 0 ) {
-                    return res.status(200).json({alert: "Seu saldo está abaixo do valor de trasferencia, irá usar o saldo do cartão de crédito!"})
-                } else {
+                    // console.log(amount, balance);
                     if (found == false) {
                         return res.status(200).json({error: "Você não tem esse email na lista de contatos!"})
-                    } else {
-                        return res.status(200).json({sucess: "Verificação ok!"})
-                    }
-                }
+                    } else  if (amount > balance && user.creditcard.length == 0) {
+                        return res.status(200).json({error: "Você não tem saldo nem cartão de crédito para este valor, favor criar um cartão!"})
+                    } else if (user) {
+                        Trasfer.find({amount: req.body.amount, sentfromid: user._id})
+                        .then(trasfer => {
+                            // const isTrasfer2m;
+                            const isTrasfer2m = trasfer.map(tras => {
+                                var diff = Math.abs(new Date(tras.datedb) - new Date());
+                                console.log(diff)
+                                if (diff <= 120000) {
+                                    console.log('ta pra sair', trasfer);
+                                    return true
+                                } else {
+                                    return true
+                                }
+                            })
+                            console.log(isTrasfer2m); 
+                            if (isTrasfer2m.includes(true)) {
+                                console.log('oie')
+                                return res.status(200).json({error: 'Já foi feita uma trasferencia no mesmo valor por você a menos de 2 minutos'})    
+                            } else if (amount > balance && user.creditcard.length > 0 ) {
+                                return res.status(200).json({alert: "Seu saldo está abaixo do valor de trasferencia, irá usar o saldo do cartão de crédito!"})
+                            } else {
+                                return res.status(200).json({sucess: "Verificação ok!"})
+                            }
+                        })
+                    } 
                
             })
     }
@@ -71,22 +89,27 @@ router.post('/normaltrasfer', (req,res) => {
             }else{
                 User.findOne( { _id: req.body.userid })
                     .then(user => {
-                        console.log(user.creditcard.length)
+                        // console.log(user.creditcard.length)
                         if (req.body.amount > user.balance && user.creditcard.length == 0) {
                                 return res.status(404).json({error: 'Vei tu não tem dinheiro, nem cartão iasdhuihasdah'})
                         } else {
                                 Trasfer.find({amount: req.body.amount})
                                 .then(trasfer => {
-                                    // console.log(trasfer);
-                                        if(req.body.amount > user.balance){
-                                            console.log('mais dinheiro que vc tem')
+                                    // console.log(user.balance);
+                                        if(req.body.amount > user.balance && user.balance == 0){
+                                            // console.log('0 dinheiro vai apenas pro debt')
+                                            const debt = Number(user.creditcard[0].debt) + Number(req.body.amount);
+                                            User.findOneAndUpdate({_id: req.body.userid}, { $set: {creditcard: {debt: debt}}})
+                                                 .catch(err => res.status(404).json({ err }))
+                                        } else if (req.body.amount > user.balance){
+                                            // console.log('mais dinheiro que vc tem')
                                             const newUserBalance = 0;
                                             const rest = user.balance - req.body.amount;
                                             const debt = Number(user.creditcard[0].debt) + Number(rest);
                                             User.findOneAndUpdate({_id: req.body.userid}, { $set: {balance: newUserBalance, creditcard: {debt: Math.abs(debt)}}})
                                                  .catch(err => res.status(404).json({ err }))
-                                        } else {
-                                            console.log('menos dinheiro que vc tem')
+                                        }  else {
+                                            // console.log('menos dinheiro que vc tem')
                                             const newUserBalance = user.balance - req.body.amount;
                                             User.findOneAndUpdate({_id: req.body.userid}, { $set: {balance: newUserBalance}})
                                             .catch(err => res.status(404).json({ err }))
@@ -95,13 +118,27 @@ router.post('/normaltrasfer', (req,res) => {
                                         User.findOneAndUpdate({email: req.body.sentto}, { $set: {balance: newUserToBalance}})
                                             .catch(err => res.status(404).json({ err }))
                                         
+                                        function formattedDate(d = new Date) {
+                                            now = new Date();
+                                            year = "" + now.getFullYear();
+                                            month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
+                                            day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
+                                            hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
+                                            minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
+                                            second = "" + now.getSeconds(); if (second.length == 1) { second = "0" + second; }
+                                            return day + "/" + month + "/" + year + " " + hour + ":" + minute + ":" + second;
+                                            }
+
+                                        // console.log(formattedDate());
+
                                         const newTrasfer = new Trasfer({
                                                 sentto: userto.name,
                                                 sentfrom: user.name,
                                                 sentfromid: user._id,
-                                                amount: req.body.amount
+                                                amount: req.body.amount,
+                                                date: formattedDate()
                                             });
-                                        console.log(newTrasfer);
+                                        // console.log(newTrasfer);
                                         newTrasfer.save()
                                             .then(trasfer => res.json(trasfer))
                                             .catch( err => console.log(err))

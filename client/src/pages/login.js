@@ -4,7 +4,7 @@ import {
 } from 'antd';
 import { Row, Col } from 'antd';
 import axios from 'axios';
-import { Link } from 'react-router-dom'
+import { Link, Router } from 'react-router-dom'
 
 class NormalLoginForm extends React.Component {
   handleSubmit = (e) => {
@@ -40,7 +40,7 @@ class NormalLoginForm extends React.Component {
     return (
       <Row>
         <Col span={6} offset={9}>
-        <div style={{background: "#bcdbf738", padding: 25, borderRadius: 10,}}>
+        <div style={{background: "#bcdbf738", padding: 25, borderRadius: 10, marginTop: "30%"}}>
           <h1 style={{textAlign: "center", fontSize: 50}}>Ekki</h1>
           <h3 style={{textAlign: "center", fontSize: 25}}>Faça seu login</h3>
             <Form onSubmit={this.handleSubmit} className="login-form">
@@ -59,10 +59,10 @@ class NormalLoginForm extends React.Component {
               )}
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" className="login-form-button">
+              <Button type="primary" htmlType="submit" className="login-form-button"  style={{marginRight: 5}}>
                 Log in
               </Button>
-              {/* Or <Link to="/register"><a>register now!</a></Link> */}
+              ou <a href="/register" >Registre-se agora!</a>
             </Form.Item>
           </Form>
         </div>

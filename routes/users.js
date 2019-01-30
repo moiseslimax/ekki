@@ -41,14 +41,14 @@ router.post('/register', (req, res) => {
     const { errors, isValid } = validadeRegisterInput(req.body);
 
     if(!isValid) {
-        return res.status(400).json(errors);
+        return res.status(200).json(errors);
     }
 
     User.findOne({ email:req.body.email })
         .then(user => {
             if(user){
                 //FALTA O BCRYPT
-                return res.status(400).json({email: 'email alredy exists'})
+                return res.status(200).json({error: 'Email já existe!'})
             }else{
                 if (req.body.balance == 0 || req.body.balance == undefined) {
                     req.body.balance = 500
@@ -61,8 +61,11 @@ router.post('/register', (req, res) => {
                     name: req.body.name,
                     email: req.body.email,
                     password: req.body.password,
-                    balance: req.body.balance,
-                    creditbalance: req.body.creditbalance
+                    balance: 500,
+                    contacts: [{
+                        email: "contatoteste@gmail.com",
+                        name: "contatoteste"
+                    }]
                 });
                 console.log(newUser);
                 newUser.save()
@@ -199,7 +202,7 @@ router.get('/creditcard/:userid', (req,res) => {
      User.findOne( { _id: req.params.userid })
          .then(user => {
              if (user.creditcard.length == 0) {
-                 return res.status(404).json({ user: 'Esse usuário não tem cartões de crédito' });
+                 return res.status(200).json({ user: 'Esse usuário não tem cartões de crédito' });
              } else {
                  res.status(200).json(user.creditcard)
              }

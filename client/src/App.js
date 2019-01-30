@@ -7,7 +7,7 @@ import Home from './pages/home';
 import Trasfer from './pages/trasfer';
 import History from './pages/history';
 import Login from './pages/login';
-
+import Register from './pages/register';
 
 const { Header, Content, Footer } = Layout;
 
@@ -40,7 +40,14 @@ class App extends Component {
           <div>
             
             {this.state.userid === false 
-            ? <Login /> 
+            ? <div>
+              <Router>
+                <Switch>
+                  <Route path="/register" component={Register} />
+                  <Route path="/" component={Login} />
+                </Switch>
+              </Router>
+              </div>
             : <Router> 
                   <Layout className="layout">
                  
@@ -71,6 +78,7 @@ class App extends Component {
                         <Route path="/" exact component={Home} userid={this.state.userid}/>
                         <Route path="/trasfer/" component={Trasfer} />
                         <Route path="/history/" component={History} />
+                        <Route path="/register" component={Register} />
                       </Switch>
                       </div>
                   </Content>

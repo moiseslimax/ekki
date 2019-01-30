@@ -75,7 +75,7 @@ import CreditCardBox from '../components/CreditCardBox'
   render() {
     // const { getFieldDecorator } = this.props.form;
   
-    console.log(this.state.data);
+  
     const columns = [
         { title: 'Name', dataIndex: 'name', key: 'name' },
         { title: 'Email', dataIndex: 'email', key: 'email' },
@@ -83,7 +83,7 @@ import CreditCardBox from '../components/CreditCardBox'
           title: 'Action', dataIndex: 'delete', key: 'x', render: (text, record) => <div><a href="" onClick={(e) => {this.handleDeleteContact(e, record.email)}}>Delete</a></div>,
         },
       ];
-      
+      console.log();
       return (
         <div>
             <h1>Dados Bancarios</h1>
@@ -92,7 +92,7 @@ import CreditCardBox from '../components/CreditCardBox'
                 <div style={{textAlign: "center"}}>
                     <h2>Saldo</h2>
                     <h4>Sua saldo disponivel é de:</h4>
-                    <p><strong style={{fontSize: 50}}>{this.state.balance}</strong> R$</p>
+                    <p><strong style={{fontSize: 50}}>{Number(this.state.balance).toFixed(2)}</strong> R$</p>
                     {this.state.creditcard.length == 0 
                     ? ''
                     : <Button type="primary" ghost onClick={()=> {this.handlePayCard()}}>Pagar cartão de crédito</Button>}

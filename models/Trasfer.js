@@ -21,9 +21,13 @@ const TrasferSchema = new Schema({
         type: String,
         required: true
     },
-    date:{
+    datedb:{
         type: Date,
         default: Date.now
+    },
+    date:{
+        type: String,
+        required: true
     }
 
 });

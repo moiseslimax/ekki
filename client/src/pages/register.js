@@ -6,28 +6,24 @@ import { Row, Col } from 'antd';
 import axios from 'axios';
 
 class NormalLoginForm extends React.Component {
+  
+  
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       if (!err) {
         // console.log(`${document.location.href}api/user/getlogin`)
-        console.log('Received values of form: ', values);
-         axios.post(`http://localhost:5000/api/user/getlogin`, { email: values.userName, password: values.password })
+        // console.log('Received values of form: ', values);
+         axios.post(`http://localhost:5000/api/user/register`, { name: values.userName, email: values.email, password: values.password, password2: values.password2 })
             .then(res => {
              if (res.data.error) {
-                switch(res.data.error) {
-                  case 'Email não encontrado':
                   message.warning(res.data.error);
-                    break;
-                  case 'Senha incorreta':
-                  message.warning(res.data.error);
-                    break; 
-                }
              } else {
-              // console.log(res.data.user._id)
-              sessionStorage.setItem("userid",res.data.user._id);
-              sessionStorage.setItem("email",res.data.user.email);
-              window.location.reload()
+              console.log(res.data)
+              message.success('Cadastro efetuado com sucesso!');
+              setTimeout( () => {      
+                window.location = '/';        
+              }  , 1500 );
               }
             })
       }
@@ -39,29 +35,42 @@ class NormalLoginForm extends React.Component {
     return (
       <Row>
         <Col span={6} offset={9}>
-        <div style={{background: "#bcdbf738", padding: 25, borderRadius: 10,}}>
-          <h1 style={{textAlign: "center", fontSize: 50}}>Ekki</h1>
-          <h3 style={{textAlign: "center", fontSize: 25}}>Faça seu login</h3>
+        <div style={{background: "#bcdbf738", padding: 25, borderRadius: 10, marginTop: "30%"}}>
+          <h1 style={{textAlign: "center", fontSize: 50}}>Registrar</h1>
+          {/* <h3 style={{textAlign: "center", fontSize: 25}}>Faça seu login</h3> */}
             <Form onSubmit={this.handleSubmit} className="login-form">
             <Form.Item>
               {getFieldDecorator('userName', {
+                rules: [{ required: true, message: 'Por favor digite um nome completo!' }],
+              })(
+                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Nome Completo" />
+              )}
+            </Form.Item>
+            <Form.Item>
+              {getFieldDecorator('email', {
                 rules: [{ required: true, message: 'Por favor digite um email!' }],
               })(
-                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
+                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
               )}
             </Form.Item>
             <Form.Item>
               {getFieldDecorator('password', {
                 rules: [{ required: true, message: 'Por favor digite uma senha!' }],
               })(
-                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Senha" />
               )}
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit" className="login-form-button">
-                Log in
-              </Button>
-              Or <a href="">register now!</a>
+              {getFieldDecorator('password2', {
+                rules: [{ required: true, message: 'Por favor confirme sua senha!' }],
+              })(
+                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Cofirme sua Senha" />
+              )}
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit" className="login-form-button" style={{marginRight: 5}}>
+               Registrar
+              </Button> ou voltar para<a href="/login"> Login</a>
             </Form.Item>
           </Form>
         </div>

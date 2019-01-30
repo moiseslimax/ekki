@@ -52,7 +52,7 @@ export default class CreditCardBox extends Component {
           </div>
         : <div>
             <h4>Sua gasto com cartão de crédito é de:</h4>
-            <p><strong style={{fontSize: 50}}>{this.state.cardDebt}</strong>  R$</p>
+            <p><strong style={{fontSize: 50}}>{Number(this.state.cardDebt).toFixed(2)}</strong>  R$</p>
             <div>
               <Button type="danger" ghost onClick={(e)=> {this.handleDeleteCard(e)}}>Excluir cartão de crédito</Button>
               {/* <ModalCreditCard card={this.state.card} /> */}

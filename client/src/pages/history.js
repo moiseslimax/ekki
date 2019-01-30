@@ -29,19 +29,19 @@ export default class History extends Component {
             { title: 'Data da Trasferencia', dataIndex: 'date', key: 'date' },
           ];
           
-          console.log()
+          
         return (
             <div>
                 
             <Row>
               <Col span={24}>
-                <h1>Historico</h1>
+                <h1>Histórico de Trasferencia</h1>
                 <div>
                 <Table
                     columns={columns}
                     dataSource={this.state.data}
                 />
-
+                
                 </div>
               </Col>
             </Row>

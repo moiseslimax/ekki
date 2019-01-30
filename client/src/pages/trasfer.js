@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Steps, Button, message, Form, Icon, Input, InputNumber, Spin, notification } from 'antd';
 import axios from 'axios';
+import { Link } from "react-router-dom";
 
 const Step = Steps.Step;
 
@@ -42,6 +43,7 @@ class TrasferForm extends React.Component {
     .then(res => {
       console.log(res)
       if (res.data.error) {
+        this.setState({email: '', amount: ''});
         notification.open({
           message: 'Erro na transação!',
           description: res.data.error,
@@ -49,14 +51,22 @@ class TrasferForm extends React.Component {
         });
         let current = this.state.current - 1;
         this.setState({ current });
-      } else if (res.data.alert) {
-        notification.open({
-          message: 'Aviso de transação!',
-          description: res.data.alert,
-          duration: 6.5
+      } else if (res.data.sucess || res.data.alert){
+        if (res.data.alert) {
+          notification.open({
+            message: 'Aviso de transação!',
+            description: res.data.alert,
+            duration: 6.5
+          })
+        }
+        //Trasfer post
+        console.log('chegou');
+        axios.post('http://localhost:5000/api/trasfer/normaltrasfer/',{userid: sessionStorage.getItem("userid"), sentto: this.state.email, amount: this.state.amount})
+        .then(res => {
+          console.log(res)
+          let current = this.state.current + 1;
+          this.setState({ current });
         });
-      } else {
-        console.log(res.data)
       }
 
     })
@@ -68,7 +78,7 @@ class TrasferForm extends React.Component {
   }
   onAmountChange = (event) => {
     this.setState({amount: event})
-    console.log(this.state.amount)
+    // console.log(this.state.amount)
   }
 
   render() {
@@ -138,13 +148,17 @@ class TrasferForm extends React.Component {
         }
         {
           current > 1
-            && <div> e 0</div>
+            && 
+            <div style={{ textAlign: "center", justifyContent: "center"}}> 
+              <h1 style={{display: "inline-block", fontSize: 50, marginTop: 60}}>Sua trasferencia foi realizada com sucesso!</h1>
+              {/* <Link to="/"><Button type="primary" size="large">Voltar para Home!</Button></Link> */}
+            </div>
         }
         </div>
         <div className="steps-action">
           {
             current === steps.length - 1
-            && <Button type="primary" onClick={() => message.success('Processing complete!')}>Done</Button>
+            && ''
           }
           {
             // current > 0
